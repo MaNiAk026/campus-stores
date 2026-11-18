@@ -1,13 +1,46 @@
+/*
+  Campus Stores visual system.
+  Values follow the landing-page-design skill (Part B):
+  - one typeface (Geist, bundled locally so the desk works offline)
+  - sizes on the Tailwind scale: 12/16, 14/20, 16/24, 20/28, 24/32
+  - spacing only from the token steps below
+  - Tailwind radii (6, 8, 12, 16) and the nested radius formula
+  - flat surfaces, full borders, approved dark mode surfaces
+  - one easing curve, transform and opacity only
+*/
+@font-face {
+  font-family: "Geist";
+  src: url("./fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 :root {
   color-scheme: light dark;
-  background: light-dark(#f0f2f1, #191e21);
+  --s-25: 2px;
+  --s-50: 4px;
+  --s-75: 8px;
+  --s-100: 12px;
+  --s-200: 16px;
+  --s-300: 24px;
+  --s-400: 32px;
+  --s-500: 40px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 12px;
+  --r-2xl: 16px;
+  --r-full: 9999px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --font: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: light-dark(#eceeec, #181818);
 }
 body {
   margin: 0;
-  padding: clamp(10px, 3vw, 44px) clamp(6px, 3vw, 36px);
+  padding: clamp(8px, 3vw, 40px) clamp(8px, 3vw, 32px);
+  font-family: var(--font);
 }
 body > main {
-  max-width: 1060px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 .icon-library {
@@ -16,36 +49,53 @@ body > main {
   pointer-events: none;
 }
 .store-icon {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  fill: currentColor;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.skiplink {
+  position: absolute;
+  left: var(--s-200);
+  top: var(--s-200);
+  z-index: 10;
+  padding: var(--s-75) var(--s-100);
+  border-radius: var(--r-lg);
+  background: #1d3a48;
+  color: #fff;
+  font: 600 14px/20px var(--font);
+  transform: translateY(-200%);
+}
+.skiplink:focus {
+  transform: none;
 }
 
 #campus-stores {
   color-scheme: light dark;
-  --ink: light-dark(#202c35, #ecf0f0);
-  --quiet: light-dark(#526370, #b9c5cb);
-  --paper: light-dark(#fff, #232a30);
-  --desk: light-dark(#f3f5f5, #1d2328);
-  --nav: light-dark(#eaf0f1, #29333b);
-  --sel: light-dark(#233e4c, #c5dce4);
-  --inv: light-dark(#fff, #172b34);
-  --line: light-dark(#d2dcdf, #475158);
-  --memo: light-dark(#fff3d8, #3d3426);
-  --memotxt: light-dark(#65491e, #ead4a5);
-  --mark: light-dark(#bd502f, #f2a585);
-  --ok: light-dark(#e3f1e8, #2d4838);
-  --oktxt: light-dark(#25523d, #bedac8);
+  --ink: light-dark(#18232a, #f1f1ef);
+  --quiet: light-dark(#55626b, #a8afb3);
+  --paper: light-dark(#ffffff, #1f1f1f);
+  --desk: light-dark(#f5f6f4, #272727);
+  --raised: light-dark(#ffffff, #313131);
+  --sel: light-dark(#1d3a48, #cfe1e8);
+  --inv: light-dark(#ffffff, #131209);
+  --line: light-dark(#dde2df, #3a3a3a);
+  --line-strong: light-dark(#bcc6c2, #4d4d4d);
+  --memo: light-dark(#fff5df, #131209);
+  --memotxt: light-dark(#664613, #ecd29e);
+  --memoline: light-dark(#efdcb2, #4a3d22);
+  --mark: light-dark(#b9472a, #f2a585);
+  --late: light-dark(#fbe8e2, #3b2019);
+  --latetxt: light-dark(#97361d, #f5b69c);
+  --ok: light-dark(#e3f1e8, #1d3326);
+  --oktxt: light-dark(#23523b, #b9dcc6);
+  --outbg: light-dark(#e6eff3, #1e2d34);
+  --outtxt: light-dark(#1d3a48, #b8d3de);
   background: var(--paper);
   color: var(--ink);
-  font:
-    14px/1.48 "Inter",
-    "Arial",
-    sans-serif;
+  font: 400 14px/20px var(--font);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--r-2xl);
   overflow: hidden;
   container-type: inline-size;
 }
@@ -55,60 +105,102 @@ body > main {
 #campus-stores [hidden] {
   display: none !important;
 }
-#campus-stores h1,
-#campus-stores h2,
-#campus-stores h3,
-#campus-stores p {
+#campus-stores :is(h1, h2, h3, p, ul) {
   margin: 0;
 }
-#campus-stores h1 {
-  font:
-    600 clamp(24px, 4cqw, 33px)/1.13 "Archivo",
-    system-ui,
-    sans-serif;
-  letter-spacing: -0.05em;
+#campus-stores :is(h1, h2, h3) {
+  text-wrap: balance;
 }
+#campus-stores p {
+  text-wrap: pretty;
+}
+
+/* Named text styles */
+/* Heading 5 · 24/32 semibold */
+#campus-stores h1 {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+/* Heading 6 · 20/28 semibold */
 #campus-stores h2 {
   font-size: 20px;
-  letter-spacing: -0.03em;
+  line-height: 28px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
+/* Title 3 · 16/24 medium */
 #campus-stores h3 {
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
 }
-#campus-stores .muted,
-#campus-stores small {
+/* Caption 5 · 12/16 regular */
+#campus-stores small,
+#campus-stores .muted {
   color: var(--quiet);
-}
-#campus-stores small {
   font-size: 12px;
+  line-height: 16px;
 }
+#campus-stores b,
+#campus-stores strong {
+  font-weight: 600;
+}
+
+/* Exam strip */
 #campus-stores .examstrip {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 4px 16px;
+  align-items: center;
+  gap: var(--s-75) var(--s-200);
   flex-wrap: wrap;
   background: var(--desk);
   border-bottom: 1px solid var(--line);
-  padding: 9px 18px;
+  padding: var(--s-75) var(--s-300);
   color: var(--quiet);
-  font-size: 13px;
+  font-size: 12px;
+  line-height: 16px;
+}
+#campus-stores .examstrip > span {
+  margin-right: auto;
+}
+#campus-stores .striplink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-50);
+  color: var(--sel);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--r-md);
+}
+#campus-stores .striplink:hover {
+  text-decoration: underline;
+}
+#campus-stores .striplink .store-icon {
+  width: 14px;
+  height: 14px;
 }
 #campus-stores details[open] {
   width: 100%;
+  order: 3;
 }
 #campus-stores summary {
-  font-weight: 650;
+  font-weight: 600;
   color: var(--sel);
   cursor: pointer;
+  border-radius: var(--r-md);
 }
 #campus-stores .briefcopy {
   color: var(--ink);
-  max-width: 79ch;
-  padding: 12px 0 5px;
+  max-width: 72ch;
+  padding: var(--s-100) 0 var(--s-75);
   display: grid;
-  gap: 8px;
+  gap: var(--s-75);
+  font-size: 14px;
+  line-height: 20px;
 }
+
+/* Masthead */
 #campus-stores .mast,
 #campus-stores .brandblock,
 #campus-stores .shift,
@@ -117,10 +209,10 @@ body > main {
 #campus-stores .buttons {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--s-100);
 }
 #campus-stores .mast {
-  padding: 17px 20px;
+  padding: var(--s-200) var(--s-300);
   justify-content: space-between;
   flex-wrap: wrap;
 }
@@ -131,173 +223,620 @@ body > main {
   height: 40px;
   display: grid;
   place-items: center;
-  border-radius: 9px;
+  border-radius: var(--r-xl);
 }
 #campus-stores .brandmark svg {
-  width: 25px;
-  height: 25px;
+  width: 24px;
+  height: 24px;
 }
 #campus-stores .clock {
   display: grid;
   text-align: right;
+  padding: var(--s-75) var(--s-100);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  background: var(--desk);
 }
 #campus-stores .clock strong {
   font-variant-numeric: tabular-nums;
+  font-size: 16px;
+  line-height: 24px;
 }
+
+/* Shift banner */
 #campus-stores .shift {
   background: var(--memo);
   color: var(--memotxt);
-  padding: 12px 19px;
+  padding: var(--s-200) var(--s-300);
   justify-content: space-between;
-  border-block: 1px solid var(--line);
+  border-block: 1px solid var(--memoline);
 }
-#campus-stores .shift div {
-  max-width: 67ch;
+#campus-stores .shifttext {
+  max-width: 64ch;
+  display: grid;
+  gap: var(--s-25);
 }
-#campus-stores .shift b {
-  font-size: 13px;
-}
-#campus-stores .shift button {
-  background: transparent;
-  border-color: var(--memotxt);
-  color: var(--memotxt);
+#campus-stores .shiftside {
+  display: grid;
+  justify-items: end;
+  gap: var(--s-100);
   flex-shrink: 0;
 }
-#campus-stores button,
-#campus-stores select,
-#campus-stores input,
-#campus-stores textarea {
+
+/* Shift timeline: the fill glides to the current moment */
+#campus-stores .stepper {
+  --p: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#campus-stores .stepper::before,
+#campus-stores .stepper::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  border-radius: var(--r-full);
+  background: var(--memoline);
+}
+#campus-stores .stepper::after {
+  background: var(--memotxt);
+  transform: scaleX(var(--p));
+  transform-origin: left center;
+  transition: transform 700ms var(--ease);
+}
+#campus-stores .stepper li {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: var(--s-50);
+}
+#campus-stores .stepper .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--r-full);
+  background: var(--memo);
+  border: 2px solid var(--memoline);
+  transition: transform 500ms var(--ease);
+}
+#campus-stores .stepper :is(.done, .now) .dot {
+  background: var(--memotxt);
+  border-color: var(--memotxt);
+}
+#campus-stores .stepper .now .dot {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 3px var(--memoline);
+}
+#campus-stores .stepper small {
+  color: var(--memotxt);
+  opacity: 0.7;
+  white-space: nowrap;
+}
+#campus-stores .stepper .now small {
+  opacity: 1;
+  font-weight: 600;
+}
+#campus-stores .shift b {
+  font-size: 16px;
+  line-height: 24px;
+}
+#campus-stores .shift button {
+  background: var(--memotxt);
+  border-color: var(--memotxt);
+  color: var(--memo);
+  flex-shrink: 0;
+}
+#campus-stores .shift button:hover {
+  border-color: var(--memotxt);
+  opacity: 0.9;
+}
+
+/* Controls · Button-sm 14/20 semibold, 8px by 12px padding */
+#campus-stores :is(button, select, input, textarea) {
   font: inherit;
   color: var(--ink);
-  border: 1px solid var(--line);
-  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
   background: var(--paper);
   min-width: 0;
-  padding: 7px 9px;
+  padding: var(--s-75) var(--s-100);
 }
 #campus-stores button {
-  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-75);
   font-weight: 600;
   cursor: pointer;
+  transition:
+    background-color 300ms var(--ease),
+    border-color 300ms var(--ease),
+    color 300ms var(--ease),
+    opacity 300ms var(--ease),
+    transform 300ms var(--ease);
 }
 #campus-stores button:hover {
   border-color: var(--sel);
+  background: var(--desk);
 }
-#campus-stores .primary {
+#campus-stores button:active {
+  transform: scale(0.98);
+}
+#campus-stores .primary,
+#campus-stores .primary:hover {
   background: var(--sel);
   color: var(--inv);
   border-color: var(--sel);
 }
-#campus-stores :is(button, input, textarea, select, summary):focus-visible {
+#campus-stores .primary:hover {
+  opacity: 0.9;
+}
+#campus-stores .strong {
+  border-color: var(--sel);
+  color: var(--sel);
+}
+#campus-stores .ghost {
+  border-color: transparent;
+  background: transparent;
+}
+#campus-stores :is(button, input, textarea, select, summary, a):focus-visible {
   outline: 3px solid var(--mark);
   outline-offset: 2px;
 }
+#campus-stores .page:focus {
+  outline: none;
+}
+
+/* Layout */
 #campus-stores .shell {
   display: grid;
-  grid-template-columns: 155px minmax(0, 1fr);
-  min-height: 315px;
+  grid-template-columns: 200px minmax(0, 1fr);
+  min-height: 420px;
 }
 #campus-stores nav {
-  background: var(--nav);
+  position: relative;
+  background: var(--desk);
   border-right: 1px solid var(--line);
-  padding: 12px 8px;
+  padding: var(--s-100);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--s-50);
+}
+/* One pill behind the active tab, gliding between tabs */
+#campus-stores .navpill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: var(--r-lg);
+  background: var(--sel);
+  pointer-events: none;
+}
+#campus-stores .navpill.ready {
+  transition: transform 500ms var(--ease);
 }
 #campus-stores nav button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  justify-content: flex-start;
   text-align: left;
-  border: 1px solid transparent;
+  border-color: transparent;
   background: transparent;
   font-weight: 500;
 }
-#campus-stores nav button[aria-pressed="true"] {
-  background: var(--sel);
+#campus-stores nav button:hover {
+  background: var(--paper);
+  border-color: var(--line);
+}
+#campus-stores nav button[aria-pressed="true"],
+#campus-stores nav button[aria-pressed="true"]:hover {
+  background: transparent;
+  border-color: transparent;
   color: var(--inv);
 }
-#campus-stores nav svg {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-}
 #campus-stores .page {
-  padding: 17px 17px 20px;
+  padding: var(--s-300);
   min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: var(--s-200);
 }
-#campus-stores .sectionhead,
-#campus-stores .statusbar {
+#campus-stores .sectionhead {
   justify-content: space-between;
   flex-wrap: wrap;
 }
-#campus-stores .sectionhead {
-  margin-bottom: 12px;
-}
 #campus-stores .sectionhead small {
-  margin-top: 2px;
+  margin-top: var(--s-25);
   display: block;
 }
+
+/* Rows and tags */
 #campus-stores .row {
   border-top: 1px solid var(--line);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px;
-  padding: 9px 0;
+  gap: var(--s-75);
+  padding: var(--s-100) 0;
+}
+#campus-stores .page > .row + .row {
+  margin-top: calc(-1 * var(--s-200));
+}
+#campus-stores .row > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: var(--s-75);
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 #campus-stores .row small,
 #campus-stores label span {
   display: block;
 }
+/* Caption 4 · 12/16 medium */
 #campus-stores .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-50);
   background: var(--desk);
   color: var(--quiet);
+  border: 1px solid var(--line);
   font-size: 12px;
-  padding: 3px 7px;
-  border-radius: 5px;
-  display: inline-block;
+  line-height: 16px;
+  font-weight: 500;
+  padding: var(--s-25) var(--s-75);
+  border-radius: var(--r-full);
+  white-space: nowrap;
 }
-#campus-stores .good {
+#campus-stores .tag .store-icon {
+  width: 14px;
+  height: 14px;
+}
+#campus-stores .tag.good,
+#campus-stores .tag.back {
   background: var(--ok);
   color: var(--oktxt);
+  border-color: transparent;
 }
-#campus-stores .record {
-  margin-top: 14px;
-  padding: 12px 13px;
-  background: var(--desk);
-  border-left: 3px solid var(--sel);
+#campus-stores .tag.out {
+  background: var(--outbg);
+  color: var(--outtxt);
+  border-color: transparent;
 }
-#campus-stores .record p {
-  margin-top: 5px;
+#campus-stores .tag.late {
+  background: var(--late);
+  color: var(--latetxt);
+  border-color: transparent;
+  font-weight: 600;
 }
-#campus-stores .buttons {
+
+/* Segmented control */
+#campus-stores .segmented {
+  display: inline-flex;
   flex-wrap: wrap;
-  margin: 10px 0;
+  gap: var(--s-25);
+  padding: var(--s-25);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  background: var(--desk);
+  justify-self: start;
 }
-#campus-stores .buttons button[aria-pressed="true"] {
+#campus-stores .segmented button {
+  border-color: transparent;
+  background: transparent;
+  border-radius: var(--r-lg);
+  padding: var(--s-50) var(--s-100);
+  font-weight: 500;
+  color: var(--quiet);
+}
+#campus-stores .segmented button[aria-pressed="true"] {
+  background: var(--raised);
+  border-color: var(--line);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Kits and slips */
+#campus-stores .kit {
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  background: var(--paper);
+}
+#campus-stores .kit.haslate {
+  border-color: var(--mark);
+}
+#campus-stores .kithead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-100);
+  background: var(--desk);
+  padding: var(--s-100) var(--s-200);
+}
+#campus-stores .kithead strong {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+}
+#campus-stores .kithead small {
+  display: block;
+}
+#campus-stores .pips {
+  display: flex;
+  gap: var(--s-50);
+}
+#campus-stores .pip {
+  width: 24px;
+  height: 8px;
+  border-radius: var(--r-full);
+  background: var(--line);
+}
+#campus-stores .pip.out {
+  background: var(--sel);
+}
+#campus-stores .pip.late {
+  background: var(--mark);
+}
+#campus-stores .pip.back {
+  background: var(--oktxt);
+  opacity: 0.55;
+}
+#campus-stores .slip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s-100);
+  align-items: center;
+  padding: var(--s-200);
+  border-top: 1px solid var(--line);
+}
+#campus-stores .slip.active {
+  background: var(--desk);
+}
+#campus-stores .slipmain {
+  display: grid;
+  gap: var(--s-50);
+  min-width: 0;
+}
+#campus-stores .sliptitle {
+  display: flex;
+  align-items: center;
+  gap: var(--s-75);
+  flex-wrap: wrap;
+}
+#campus-stores .sliptitle strong {
+  font-size: 14px;
+  line-height: 20px;
+}
+#campus-stores .meta {
+  display: flex;
+  align-items: center;
+  gap: var(--s-50);
+}
+#campus-stores .meta .store-icon {
+  width: 14px;
+  height: 14px;
+}
+#campus-stores .handover {
+  display: grid;
+  gap: var(--s-25);
+  justify-self: start;
+  margin-top: var(--s-50);
+  padding: var(--s-75) var(--s-100);
+  background: var(--memo);
+  color: var(--memotxt);
+  border: 1px solid var(--memoline);
+  border-radius: var(--r-lg);
+  font-size: 12px;
+  line-height: 16px;
+}
+#campus-stores .handover strong {
+  text-wrap: pretty;
+  display: flex;
+  align-items: center;
+  gap: var(--s-50);
+  font-size: 14px;
+  line-height: 20px;
+}
+#campus-stores .slipactions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--s-75);
+}
+
+/* Panels: forms, return check, summaries */
+#campus-stores .panel {
+  display: grid;
+  gap: var(--s-100);
+  padding: var(--s-200);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  background: var(--desk);
+}
+#campus-stores .kit .panel {
+  margin: 0 var(--s-200) var(--s-200);
+  background: var(--raised);
+  border-radius: var(--r-lg);
+}
+#campus-stores .panel.warn {
+  border-color: var(--mark);
+}
+#campus-stores .panel ul {
+  padding-left: var(--s-200);
+  display: grid;
+  gap: var(--s-50);
+}
+#campus-stores .panel > button {
+  justify-self: start;
+}
+/* Title 4 · 14/20 medium, set semibold for emphasis */
+#campus-stores .paneltitle {
+  display: flex;
+  align-items: center;
+  gap: var(--s-75);
+  font-weight: 600;
+}
+#campus-stores .warn .paneltitle {
+  color: var(--latetxt);
+}
+#campus-stores .unitcard {
+  display: grid;
+  gap: var(--s-25);
+  justify-self: start;
+  min-width: min(100%, 280px);
+  padding: var(--s-100) var(--s-200);
+  border: 2px solid var(--sel);
+  border-radius: var(--r-lg);
+  background: var(--paper);
+}
+#campus-stores .unitcard b {
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+#campus-stores .caution {
+  display: flex;
+  gap: var(--s-75);
+  align-items: flex-start;
+  color: var(--latetxt);
+}
+#campus-stores .caution .store-icon {
+  margin-top: var(--s-25);
+}
+#campus-stores .hint {
+  color: var(--quiet);
+}
+#campus-stores .formerror {
+  color: var(--latetxt);
+  background: var(--late);
+  padding: var(--s-75) var(--s-100);
+  border-radius: var(--r-lg);
+  font-weight: 500;
+}
+#campus-stores .optional {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--quiet);
+  margin-left: var(--s-50);
+}
+
+/* Records and empty states */
+#campus-stores .record {
+  display: grid;
+  gap: var(--s-50);
+  padding: var(--s-200);
+  background: var(--desk);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+}
+#campus-stores .page > .ghost {
+  justify-self: start;
+  padding-left: 0;
+}
+#campus-stores .itemlist {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--s-75);
+}
+#campus-stores .itemlist li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-75);
+  flex-wrap: wrap;
+  padding: var(--s-75) var(--s-100);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+#campus-stores .memo {
+  color: var(--memotxt);
+  background: var(--memo);
+  border: 1px solid var(--memoline);
+  border-radius: var(--r-lg);
+  padding: var(--s-75) var(--s-100);
+}
+#campus-stores .empty {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: var(--s-75);
+  padding: var(--s-500) var(--s-300);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-xl);
+  color: var(--quiet);
+}
+#campus-stores .empty .store-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--oktxt);
+}
+#campus-stores .empty strong {
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 24px;
+}
+#campus-stores .empty p {
+  max-width: 44ch;
+}
+
+/* Nav count */
+#campus-stores .count {
+  margin-left: auto;
   background: var(--sel);
   color: var(--inv);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  min-width: 20px;
+  padding: var(--s-25) var(--s-75);
+  border-radius: var(--r-full);
+  text-align: center;
 }
-#campus-stores .buttons label {
-  display: flex;
-  gap: 6px;
-  align-items: center;
+#campus-stores .count.late {
+  background: var(--mark);
+}
+#campus-stores nav button[aria-pressed="true"] .count {
+  background: var(--inv);
+  color: var(--sel);
+}
+#campus-stores nav button,
+#campus-stores .count {
+  position: relative;
+}
+#campus-stores .sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Forms */
+#campus-stores .buttons {
+  flex-wrap: wrap;
+  gap: var(--s-75);
 }
 #campus-stores .form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin: 10px 0;
+  gap: var(--s-100);
 }
-#campus-stores .form label {
-  font-size: 13px;
-  font-weight: 600;
+#campus-stores .form label,
+#campus-stores .panel label {
+  font-weight: 500;
   min-width: 0;
 }
 #campus-stores .form label span {
-  margin-bottom: 3px;
+  margin-bottom: var(--s-50);
 }
 #campus-stores .form :is(select, input, textarea) {
   width: 100%;
@@ -309,21 +848,191 @@ body > main {
 #campus-stores textarea {
   resize: vertical;
 }
+
+/* Status bar */
 #campus-stores .statusbar {
+  justify-content: space-between;
+  flex-wrap: wrap;
   background: var(--desk);
   border-top: 1px solid var(--line);
-  padding: 8px 16px;
+  padding: var(--s-75) var(--s-300);
   color: var(--quiet);
   font-size: 12px;
+  line-height: 16px;
 }
 #campus-stores .statusbar span {
   flex: 1 1 160px;
 }
 #campus-stores .statusbar button {
   font-size: 12px;
+  line-height: 16px;
+  padding: var(--s-50) var(--s-100);
   background: transparent;
 }
-@container (max-width:650px) {
+
+/*
+  Motion. One curve (--ease), transform and opacity only.
+  Each class is added for one paint by app.js, naming what just changed.
+*/
+@keyframes cs-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes cs-rise-far {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes cs-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes cs-ring {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.35, 1.8);
+  }
+}
+@keyframes cs-flash {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes cs-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Panels and forms rise into place when they open */
+#campus-stores .reveal {
+  animation: cs-rise 500ms var(--ease) both;
+}
+/* Tab change: content arrives in reading order, 60ms apart, capped */
+#campus-stores .enter {
+  animation: cs-rise-far 600ms var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+/* Desk time advances: the clock and banner tick in */
+#campus-stores .clock.tick strong,
+#campus-stores .shift.tick .shifttext {
+  animation: cs-rise 600ms var(--ease) both;
+}
+/* Overdue tags ring twice when a new shift starts */
+#campus-stores .tag.late {
+  position: relative;
+}
+#campus-stores .tag.late.alert::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--mark);
+  opacity: 0;
+  animation: cs-ring 1200ms var(--ease) 400ms 2;
+}
+/* A slip that was just issued or returned rises in with a brief highlight */
+#campus-stores .slip {
+  position: relative;
+}
+#campus-stores .slip.fresh {
+  animation: cs-rise 600ms var(--ease) both;
+}
+#campus-stores .slip.fresh::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--outbg);
+  pointer-events: none;
+  animation: cs-flash 1400ms var(--ease) 300ms both;
+}
+#campus-stores .slip.fresh > * {
+  position: relative;
+}
+#campus-stores .handover.fresh {
+  animation: cs-rise 600ms var(--ease) both;
+}
+/* Recording a return: the slip slides out of the kit */
+#campus-stores .leaving {
+  opacity: 0;
+  transform: translateX(24px);
+  transition:
+    opacity 300ms var(--ease),
+    transform 300ms var(--ease);
+}
+/* The kit pip that changed, and the nav count, pop once */
+#campus-stores .pip.pop,
+#campus-stores .count.pop {
+  animation: cs-pop 600ms var(--ease);
+}
+/* Status message slides up when it changes */
+#campus-stores [data-status].toast {
+  animation: cs-rise 400ms var(--ease) both;
+}
+/* Rows answer the pointer */
+#campus-stores .row,
+#campus-stores .slip {
+  transition: background-color 300ms var(--ease);
+}
+#campus-stores .page > .row:hover {
+  background: var(--desk);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Movement becomes a plain fade */
+  #campus-stores :is(.reveal, .enter, .slip.fresh, .handover.fresh, [data-status].toast),
+  #campus-stores .clock.tick strong,
+  #campus-stores .shift.tick .shifttext {
+    animation: cs-fade 300ms var(--ease) both;
+  }
+  #campus-stores :is(.pip.pop, .count.pop) {
+    animation: none;
+  }
+  #campus-stores .tag.late.alert::after {
+    animation: none;
+  }
+  #campus-stores .leaving {
+    transform: none;
+  }
+  #campus-stores .navpill.ready,
+  #campus-stores .stepper::after,
+  #campus-stores .stepper .dot {
+    transition: none;
+  }
+  #campus-stores button:active {
+    transform: none;
+  }
+  .skiplink {
+    transition: none;
+  }
+}
+
+@container (max-width: 680px) {
   #campus-stores .shell {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -332,40 +1041,56 @@ body > main {
     border-bottom: 1px solid var(--line);
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 7px;
+    min-width: 0;
+    padding: var(--s-75);
   }
   #campus-stores nav button {
-    gap: 4px;
-    padding: 5px 7px;
+    flex-shrink: 0;
+  }
+  #campus-stores nav .count {
+    margin-left: var(--s-50);
   }
   #campus-stores .shift {
     flex-wrap: wrap;
   }
+  #campus-stores .shiftside {
+    justify-items: start;
+  }
   #campus-stores .page {
-    padding: 14px 12px;
+    padding: var(--s-200);
   }
-  #campus-stores .mast {
-    padding: 12px;
+  #campus-stores :is(.mast, .examstrip, .shift, .statusbar) {
+    padding-inline: var(--s-200);
   }
-  #campus-stores .examstrip,
-  #campus-stores .shift {
-    padding: 9px 12px;
+  #campus-stores .slip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #campus-stores .slipactions {
+    justify-content: flex-start;
+  }
+  #campus-stores .kit .panel {
+    margin: 0 var(--s-100) var(--s-100);
   }
 }
-@container (max-width:420px) {
+@container (max-width: 440px) {
   #campus-stores .form {
     grid-template-columns: minmax(0, 1fr);
   }
   #campus-stores .brandmark {
     display: none;
   }
+  #campus-stores .kithead {
+    flex-wrap: wrap;
+  }
   #campus-stores .row {
-    gap: 5px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #campus-stores .row > div:last-child {
+    justify-content: flex-start;
   }
 }
 @media (pointer: coarse) {
-  #campus-stores button,
-  #campus-stores select {
+  #campus-stores :is(button, select) {
     min-height: 44px;
   }
 }
